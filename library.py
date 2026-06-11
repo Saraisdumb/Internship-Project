@@ -1,18 +1,4 @@
 #!/usr/bin/env python3
-"""
-typedb-library — a minimal TypeDB-backed book library CLI.
-
-Commands
---------
-  add-book    <isbn> <title> <year> [genre]
-  add-author  <name> [birth_year]
-  link        <author_name> <isbn>          (creates a 'wrote' relation)
-  list-books  [--author <name>]
-  list-authors
-  get-book    <isbn>
-  delete-book <isbn>
-  delete-author <name>
-"""
 
 import argparse
 import sys
