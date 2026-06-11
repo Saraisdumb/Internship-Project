@@ -1,6 +1,5 @@
 define
 
-# --- Entities ---
 
 entity book,
     owns isbn @key,
@@ -12,7 +11,6 @@ entity author,
     owns name @key,
     owns birth-year;
 
-# --- Relations ---
 
 relation wrote,
     relates author,
@@ -21,7 +19,6 @@ relation wrote,
 book plays wrote:work;
 author plays wrote:author;
 
-# --- Attributes ---
 
 attribute isbn,        value string;
 attribute title,       value string;
