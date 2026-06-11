@@ -29,9 +29,7 @@ DB_NAME = "library"
 ADDRESS  = TypeDB.DEFAULT_ADDRESS
 
 
-# ---------------------------------------------------------------------------
-# helpers
-# ---------------------------------------------------------------------------
+
 
 def get_driver():
     return TypeDB.driver(
@@ -59,9 +57,6 @@ def _load_schema(driver):
     print("[init] Schema loaded.")
 
 
-# ---------------------------------------------------------------------------
-# commands
-# ---------------------------------------------------------------------------
 
 def add_book(driver, isbn, title, year, genre):
     with driver.transaction(DB_NAME, TransactionType.WRITE) as tx:
@@ -233,9 +228,6 @@ def delete_author(driver, name):
     print(f"[ok] Deleted author '{name}'")
 
 
-# ---------------------------------------------------------------------------
-# CLI wiring
-# ---------------------------------------------------------------------------
 
 def build_parser():
     p = argparse.ArgumentParser(
