@@ -148,7 +148,6 @@ def list_authors(driver):
 
 def get_book(driver, isbn):
     with driver.transaction(DB_NAME, TransactionType.READ) as tx:
-        # Book details
         q = (
             f'match $b isa book, has isbn "{isbn}", has $attr; '
             f'fetch {{ "attr": $attr }};'
@@ -156,7 +155,6 @@ def get_book(driver, isbn):
         answer = tx.query(q).resolve()
         attrs = list(answer.as_concept_documents())
 
-        # Authors who wrote it
         q2 = (
             f'match '
             f'$b isa book, has isbn "{isbn}"; '
@@ -190,7 +188,6 @@ def get_book(driver, isbn):
 
 def delete_book(driver, isbn):
     with driver.transaction(DB_NAME, TransactionType.WRITE) as tx:
-        # Delete any 'wrote' relations first, then the book itself
         q = (
             f'match '
             f'$b isa book, has isbn "{isbn}"; '
@@ -210,7 +207,6 @@ def delete_book(driver, isbn):
 
 def delete_author(driver, name):
     with driver.transaction(DB_NAME, TransactionType.WRITE) as tx:
-        # Delete 'wrote' relations first
         q = (
             f'match '
             f'$a isa author, has name "{name}"; '
@@ -236,39 +232,31 @@ def build_parser():
     )
     sub = p.add_subparsers(dest="command", required=True)
 
-    # add-book
     ab = sub.add_parser("add-book", help="Add a new book")
     ab.add_argument("isbn")
     ab.add_argument("title")
     ab.add_argument("year", type=int)
     ab.add_argument("genre", nargs="?", default=None)
 
-    # add-author
     aa = sub.add_parser("add-author", help="Add a new author")
     aa.add_argument("name")
     aa.add_argument("birth_year", nargs="?", type=int, default=None)
 
-    # link
     lk = sub.add_parser("link", help="Link an author to a book")
     lk.add_argument("author_name")
     lk.add_argument("isbn")
 
-    # list-books
     lb = sub.add_parser("list-books", help="List all books (or filter by author)")
     lb.add_argument("--author", default=None, metavar="NAME")
 
-    # list-authors
     sub.add_parser("list-authors", help="List all authors")
 
-    # get-book
     gb = sub.add_parser("get-book", help="Get details for a single book")
     gb.add_argument("isbn")
 
-    # delete-book
     db_ = sub.add_parser("delete-book", help="Delete a book by ISBN")
     db_.add_argument("isbn")
 
-    # delete-author
     da = sub.add_parser("delete-author", help="Delete an author by name")
     da.add_argument("name")
 
